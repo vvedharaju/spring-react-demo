@@ -16,6 +16,7 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'checkstyle'
 
 jar {
     baseName = 'myproject'
@@ -28,8 +29,29 @@ repositories {
     maven { url "http://repo.spring.io/milestone" }
 }
 
+configurations {
+    all*.exclude module : 'spring-boot-starter-logging'
+}
+
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter") {
+        exclude module: "spring-boot-starter-logging"
+    }
+
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+        exclude module: "spring-boot-starter-logging"
+
+    }
+    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework.boot:spring-boot-starter-jdbc")
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    compile("org.postgresql:postgresql:9.4-1201-jdbc41")
+    compile("io.jsonwebtoken:jjwt:0.7.0")
+    compile("net.sf.dozer:dozer:5.4.0")
+
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
@@ -42,6 +64,10 @@ sourceSets {
             srcDir 'src/main/webapp'
         }
     }
+}
+
+checkstyle {
+    toolVersion = '6.7'
 }
 
 task npmInstall(type:Exec) {
