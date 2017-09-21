@@ -1,7 +1,8 @@
 package com.staybingo.account;
 
-import com.staybingo.hibernate.account.AccountEntity;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface IAccountService {
 
     public AccountEntity registerNewAccount(AccountRegistration accountRegistration) throws AccountExistsException;

@@ -1,4 +1,4 @@
-package com.staybingo.hibernate.account;
+package com.staybingo.account;
 
 import com.staybingo.validation.ValidEmail;
 import org.dozer.Mapper;

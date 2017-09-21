@@ -1,6 +1,5 @@
 package com.staybingo.account;
 
-import com.staybingo.hibernate.account.IAccountDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,11 +14,11 @@ import java.util.Collections;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    IAccountDAO IAccountDAO;
+    AccountRepository accountRepository;
 
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Account account = IAccountDAO.findByEmail(email);
+        AccountEntity account = accountRepository.findByEmail(email);
         if (account == null) {
             throw new UsernameNotFoundException(
                     "No user found with email: "+ email);

@@ -10,10 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BaseCRUDRepositoryImpl<T, ID extends Serializable>
-        extends SimpleJpaRepository<T, ID> implements BaseCRUDRepository<T, ID>, Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+        extends SimpleJpaRepository<T, ID> implements BaseCRUDRepository<T, ID> {
+    
     private final JpaEntityInformation<T, ?> entityInformation;
     private final EntityManager em;
 
