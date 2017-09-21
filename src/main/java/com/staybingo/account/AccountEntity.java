@@ -19,7 +19,7 @@ public class AccountEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "serial")
-    private String id;
+    private Integer id;
 
     @NotNull
     @NotEmpty
@@ -30,9 +30,9 @@ public class AccountEntity {
     @NotEmpty
     private String password;
 
-    public String getId() { return this.id; }
+    public Integer getId() { return this.id; }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

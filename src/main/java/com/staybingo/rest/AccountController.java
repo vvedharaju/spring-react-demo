@@ -1,22 +1,22 @@
 package com.staybingo.rest;
 
 
-import com.staybingo.account.AccountRegistration;
-import com.staybingo.account.IAccountService;
-import com.staybingo.account.AccountEntity;
+import com.staybingo.account.*;
 import com.staybingo.util.NullUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("accounts")
+@RequestMapping("/accounts")
 public class AccountController {
 
     @Autowired
     IAccountService accountService;
+
+    @Autowired
+    AccountRepository accountRepository;
 
     @RequestMapping("/register")
     @ResponseBody
@@ -28,6 +28,19 @@ public class AccountController {
         }
 
         return registeredAccount;
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.DELETE)
+    public void deleteAccount(@RequestBody AccountEntity account) {
+        System.out.println("HEREEEE DELETE " + account.getId());
+        accountRepository.delete(account);
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @ResponseBody
+    public List<AccountEntity> getAccounts() {
+        System.out.println("HEREEEE");
+        return accountRepository.findAll();
     }
 
 }

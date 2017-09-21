@@ -3,6 +3,7 @@ package com.staybingo.common.repositories;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.io.Serializable;
@@ -11,48 +12,29 @@ import java.util.List;
 
 public class BaseCRUDRepositoryImpl<T, ID extends Serializable>
         extends SimpleJpaRepository<T, ID> implements BaseCRUDRepository<T, ID> {
-    
-    private final JpaEntityInformation<T, ?> entityInformation;
+
     private final EntityManager em;
 
-    private  Class<?> springDataRepositoryInterface;
-    public Class<?> getSpringDataRepositoryInterface() {
-        return springDataRepositoryInterface;
-    }
 
-    public void setSpringDataRepositoryInterface(
-            Class<?> springDataRepositoryInterface) {
-        this.springDataRepositoryInterface = springDataRepositoryInterface;
-    }
-
-    public BaseCRUDRepositoryImpl (JpaEntityInformation<T, ?> entityInformation, EntityManager entityManager , Class<?> springDataRepositoryInterface) {
-        super(entityInformation, entityManager);
-        this.entityInformation = entityInformation;
-        this.em = entityManager;
-        this.springDataRepositoryInterface = springDataRepositoryInterface;
-    }
-
-    /**
-     * Creates a new {@link SimpleJpaRepository} to manage objects of the given
-     * domain type.
-     *
-     * @param domainClass
-     * @param em
-     */
-    public BaseCRUDRepositoryImpl(Class<T> domainClass, EntityManager em) {
-        this(JpaEntityInformationSupport.getEntityInformation(domainClass, em), em, null);
+    public BaseCRUDRepositoryImpl(JpaEntityInformation<T, ?> entityInformation, EntityManager em) {
+        super(entityInformation, em);
+        this.em = em;
     }
 
     public <S extends T> S save(S entity)
     {
-        if (this.entityInformation.isNew(entity)) {
-            this.em.persist(entity);
-            flush();
-            return entity;
-        }
-        entity = this.em.merge(entity);
-        flush();
-        return entity;
+        return super.save(entity);
+    }
+
+    @Transactional
+    public void delete(ID id) {
+        System.out.println("ENTERING CUSTOM DELETE METHODDDDD " + id);
+        super.delete(id);
+    }
+
+    @Transactional
+    public void delete(T entity) {
+        super.delete(entity);
     }
 
 
