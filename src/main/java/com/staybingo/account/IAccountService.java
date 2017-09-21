@@ -1,7 +1,9 @@
 package com.staybingo.account;
 
+import com.staybingo.hibernate.account.AccountEntity;
+
 public interface IAccountService {
 
-    public Account registerNewAccount(AccountRegistration accountRegistration) throws AccountExistsException;
+    public AccountEntity registerNewAccount(AccountRegistration accountRegistration) throws AccountExistsException;
 
 }

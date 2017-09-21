@@ -1,5 +1,7 @@
 package com.staybingo.account;
 
+import com.staybingo.hibernate.account.AccountEntity;
+import com.staybingo.hibernate.account.AccountRepository;
 import com.staybingo.hibernate.account.IAccountDAO;
 import com.staybingo.util.NullUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,29 +14,29 @@ import javax.transaction.Transactional;
 public class AccountService implements IAccountService{
 
     @Autowired
-    IAccountDAO IAccountDAO;
+    AccountRepository accountRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
 
     @Transactional
-    public Account registerNewAccount(AccountRegistration accountRegistration) throws AccountExistsException{
+    public AccountEntity registerNewAccount(AccountRegistration accountRegistration) throws AccountExistsException{
         if (emailExists(accountRegistration.getEmail())) {
             throw new AccountExistsException("There is already an account with that email address: " +
                 accountRegistration.getEmail());
         }
 
         // TODO: bcrypt rest of registration process
-        return IAccountDAO.insert(convertToAccount(accountRegistration));
+        return accountRepository.save(convertToAccount(accountRegistration));
     }
 
     private boolean emailExists(String email) {
-        Account account = IAccountDAO.findByEmail(email);
+        AccountEntity account = accountRepository.findByEmail(email);
         return NullUtils.isNotNull(account);
     }
 
-    private Account convertToAccount(AccountRegistration accountRegistration) {
-        Account account = new Account();
+    private AccountEntity convertToAccount(AccountRegistration accountRegistration) {
+        AccountEntity account = new AccountEntity();
         account.setEmail(accountRegistration.getEmail());
         account.setPassword(passwordEncoder.encode(accountRegistration.getPassword()));
         return  account;
